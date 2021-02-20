@@ -1,0 +1,59 @@
+╠  ═  ╦  ╚  ║  ■
+
+
+╥
+╠══■ A ------------------- { last: false, indent: '' }
+╠══╦╡ 1 ------------------ { last: false, indent: '' }
+║  ╠══╦╡ 1-1 ------------- { last: false, indent: '║  ' }
+║  ║  ╠══■ 1-1 A --------- { last: false, indent: '║  ║  ' }
+║  ║  ╚══╦╡ 1-1-1 -------- { last: true,  indent: '║  ║  ' }
+║  ║     ╠══■ 1-1-1 A ---- { last: false, indent: '║  ║     ' }
+║  ║     ╚══■ 1-1-1 B ---- { last: true,  indent: '║  ║     ' }
+║  ╚══╦╡ 1-2 ------------- { last: true,  indent: '║  ' }
+║     ╚══■ 1-2 A --------- { last: true,  indent: '║     ' }
+╚══╦╡ 2 ------------------ { last: true,  indent: '' }
+   ╠══╦╡ 2-1 ------------- { last: false, indent: '   ' }
+   ║  ╠══■ 2-1 A --------- { last: false, indent: '   ║  ' }
+   ║  ╚══╦╡ 2-1-1 -------- { last: true,  indent: '   ║  ' }
+   ║     ╠══■ 2-1-1 A ---- { last: false, indent: '   ║     ' }
+   ║     ╚══■ 2-1-1 B ---- { last: true,  indent: '   ║     ' }
+   ╚══╦╡ 2-2 ------------- { last: true,  indent: '   ' }
+      ╚══■ 2-2 A --------- { last: true,  indent: '      ' }
+
+_firstChar(last: boolean) {
+   return last ? '╚' : '╠';
+}
+
+_printSuite(currentSuite, options) {
+
+   let last: boolean = options.last;
+   let indent: string = options.indent;
+
+   const firstChar = _firstChar(last);
+
+   if (indentLevel === 0) {
+      log(╥);
+   } else {
+      log(`${indent}${firstChar}══╦╡`)
+   }
+
+   const hasSuites = suite.suites.length === 0;
+
+   const testsIndentPrepent = hasSuites ? '║  ' : '   ';
+   const testIndent = `${indent}${testsIndentPrepent}`;
+
+   suite.tests.forEach((test, idx) => {
+      const isLast = hasSuites && idx === suite.tests.length - 1;
+      _printTest(test, { last: isLast, indent: testIndent });
+   });
+
+   const suitesIndentPrepent = (isLast) => {
+      return isLast ? ' ' : '║';
+   };
+   const suiteIndent = (isLast) => `${suitesIndentPrepent(isLast)}  `;
+
+   suite.suites.forEach((suite, idx) => {
+      const isLast = idx === suite.suites.length - 1;
+      _printSuite(suite, {last: isLast, indent: suiteIndent});
+   });
+}
