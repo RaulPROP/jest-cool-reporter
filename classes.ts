@@ -62,10 +62,6 @@ export class CustomSuite {
 
     const indent = `${previousIndent}${nextIndent}`;
 
-    process.stdout.write(
-      `${this.title} (${this.maxFailedIdx}) ${decorate ? "y" : "n"}\n`
-    );
-
     for (let idx = 0; idx < this.tests.length; idx++) {
       const test = this.tests[idx];
       test.previousIndent = indent;
